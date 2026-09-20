@@ -1,11 +1,11 @@
 {
-    "name": "rennf93/guard-core-psr15",
+    "name": "rennf93/psr15-guard",
     "description": "PSR-15 middleware adapter for guard-core-php: translates PSR-7 server requests to the guard-core engine and block verdicts back to PSR-7 responses",
     "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "rennf93/guard-core-php": "@dev",
+        "rennf93/guard-core-php": "dev-guard-core-port-php as v0.0.1",
         "psr/http-message": "^1.1|^2.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",

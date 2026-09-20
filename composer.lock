@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aaf1e06663a47b5e957e41328716d9a5",
+    "content-hash": "90d623d7a096e97990f68d2d2ea8a93b",
     "packages": [
         {
             "name": "psr/http-factory",
@@ -233,7 +233,7 @@
             "dist": {
                 "type": "path",
                 "url": "../guard-core-php",
-                "reference": "15f6f580bc346fd900328e25038c93ee6dd147af"
+                "reference": "ef5f4aafdb12280b7bf661079cd0b13d5a2d0fd7"
             },
             "require": {
                 "ext-json": "*",
@@ -344,7 +344,14 @@
             "time": "2024-09-09T07:06:30+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "rennf93/guard-core-php",
+            "version": "dev-guard-core-port-php",
+            "alias": "v0.0.1",
+            "alias_normalized": "0.0.1.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "rennf93/guard-core-php": 20
