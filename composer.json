@@ -27,6 +27,10 @@
         {
             "type": "path",
             "url": "../guard-core-php"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/rennf93/guard-core-php.git"
         }
     ],
     "minimum-stability": "dev",
