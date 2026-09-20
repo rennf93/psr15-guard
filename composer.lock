@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8c81a61f86cd0ee2a514687f382ebd5",
+    "content-hash": "937d8e1fe1467e670635d25a000b3945",
     "packages": [
         {
             "name": "psr/http-factory",
@@ -229,11 +229,17 @@
         },
         {
             "name": "rennf93/guard-core-php",
-            "version": "dev-guard-core-port-php",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rennf93/guard-core-php.git",
+                "reference": "89e8bd596257e607c427fc0cc26b80731cf80279"
+            },
             "dist": {
-                "type": "path",
-                "url": "../guard-core-php",
-                "reference": "ef5f4aafdb12280b7bf661079cd0b13d5a2d0fd7"
+                "type": "zip",
+                "url": "https://api.github.com/repos/rennf93/guard-core-php/zipball/89e8bd596257e607c427fc0cc26b80731cf80279",
+                "reference": "89e8bd596257e607c427fc0cc26b80731cf80279",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -259,9 +265,11 @@
                 "MIT"
             ],
             "description": "PHP port of guard-core: behavioral WAF engine (detection engine conformance milestone)",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/rennf93/guard-core-php/tree/v0.1.0",
+                "issues": "https://github.com/rennf93/guard-core-php/issues"
+            },
+            "time": "2026-09-20T01:38:59+00:00"
         }
     ],
     "packages-dev": [
@@ -344,18 +352,9 @@
             "time": "2024-09-09T07:06:30+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "rennf93/guard-core-php",
-            "version": "dev-guard-core-port-php",
-            "alias": "v0.0.1",
-            "alias_normalized": "0.0.1.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "rennf93/guard-core-php": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
