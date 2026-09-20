@@ -1,0 +1,34 @@
+{
+    "name": "rennf93/guard-core-psr15",
+    "description": "PSR-15 middleware adapter for guard-core-php: translates PSR-7 server requests to the guard-core engine and block verdicts back to PSR-7 responses",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "rennf93/guard-core-php": "@dev",
+        "psr/http-message": "^1.1|^2.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
+    },
+    "require-dev": {
+        "nyholm/psr7": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "RenzoFranceschini\\GuardCorePsr15\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "php bin/test_psr15.php",
+        "lint": "for f in $(find src bin -name '*.php'); do php -l \"$f\" > /dev/null || exit 1; done && echo LINT_OK"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../guard-core-php"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
