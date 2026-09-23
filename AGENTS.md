@@ -8,8 +8,9 @@ rennf93/psr15-guard (https://github.com/rennf93/psr15-guard) is a PSR-15 middlew
 - Composer package `rennf93/psr15-guard`, type `library`, license MIT.
 - This repository contains NO security logic. Detection, rate limiting, bans, and verdicts all live in guard-core-php.
 - PHP `^8.2`. Autoload is PSR-4: `RenzoFranceschini\GuardCorePsr15\` maps to `src/`.
-- Shipped tag: `v0.1.0` (points at commit 55c17a9, the current tip of `main`). There are no other tags or releases.
-- `main` is protected: never push to it, never merge into it, never create tags or releases.
+- Shipped tag: `v0.1.0` (points at commit 55c17a9, the current tip of `master`). There are no other tags or releases.
+- `master` is protected: never push to it, never merge into it, never create tags or releases.
+- Docs site: MkDocs Material in `docs/` (strict build in CI, gh-deploy on push to `master` touching docs sources). Runnable demos in `examples/` are exercised by the live-smoke workflow.
 
 ## Ecosystem Position
 
@@ -56,14 +57,25 @@ The CI-verified path (copy this when describing a working environment; from `.gi
 4. `composer install --no-interaction --no-progress`, then `composer update rennf93/guard-core-php --no-interaction`.
 5. Run the php -l sweep, then `REDIS_HOST=127.0.0.1 php bin/test_psr15.php` against a `redis:7-alpine` service on port 6379.
 
+Local Docker verification (no host PHP needed; used before pushing example or suite changes):
+
+```sh
+docker run --rm --network host -v "$PWD":/app -v /tmp/composer-cache-php:/tmp/composer-cache \
+  -w /app -e REDIS_HOST=host.docker.internal composer:2 \
+  sh -c "composer install --no-interaction && composer lint && php bin/test_psr15.php"
+```
+
 ## Development Commands
 
-Composer scripts (composer.json `scripts`; these are the only two):
+There is no Makefile. Composer scripts (composer.json `scripts`):
 
 | Command | What it runs |
 | --- | --- |
 | `composer test` | `php bin/test_psr15.php` |
 | `composer lint` | `for f in $(find src bin -name '*.php'); do php -l "$f" > /dev/null || exit 1; done && echo LINT_OK` |
+| `mkdocs build --strict` | Build the docs site (run with `docker run --rm -v "$PWD":/work -w /work python:3.12-slim sh -c "pip install -q mkdocs-material && mkdocs build --strict"`; the `site/` output is gitignored) |
+| `docker compose -f examples/simple_app/docker-compose.yml up --build -d --wait` | Bring up the simple example app plus Redis; then run the curl assertions from `.github/workflows/live-smoke.yml` |
+| `docker compose -f examples/advanced_app/docker-compose.yml up --build -d --wait` | Same for the advanced example (assertions in `examples/advanced_app/README.md`) |
 
 Direct commands used by CI (verified in `.github/workflows/ci.yml`; the same install, lint, and test steps appear in `release.yml` and `scheduled-lint.yml`):
 
@@ -73,21 +85,36 @@ Direct commands used by CI (verified in `.github/workflows/ci.yml`; the same ins
 - `php bin/test_psr15.php` with env `REDIS_HOST=127.0.0.1`
 - `composer audit` (Composer audit job, PHP 8.3)
 
-`bin/` contains exactly one script: `bin/test_psr15.php` (the whole test suite, plain PHP, no PHPUnit). There is no Makefile, no PHPUnit config, no PHPStan, no PHP-CS-Fixer, and no docker setup in this repo.
+`bin/` contains exactly one script: `bin/test_psr15.php` (the whole test suite, plain PHP, no PHPUnit). There is no PHPUnit config, no PHPStan, and no PHP-CS-Fixer in this repo. There is no host PHP here either; examples and docs are verified with Docker (`composer:2` and `php:8.3-cli-alpine` images, `python:3.12-slim` for mkdocs), see Quick Start and the command table.
 
 ## Project Structure
 
 ```
 .github/dependabot.yml                Weekly dependabot: github-actions + composer (grouped)
+.github/labels.yml                    Label registry for sync-labels
+.github/labeler.yml                   PR area-label rules for labeler
 .github/workflows/ci.yml              CI: test matrix php 8.2/8.3/8.4 + redis service + composer audit
 .github/workflows/release.yml         Release Gate: same suite, runs on v* tags
 .github/workflows/scheduled-lint.yml  Weekly cron (Mon 04:00 UTC): php -l sweep + composer audit
+.github/workflows/issue-link.yml      PR must close an open issue or carry no-issue
+.github/workflows/summary.yml         AI issue summary on the needs-summary label
+.github/workflows/sync-labels.yml     Applies .github/labels.yml on push/dispatch
+.github/workflows/greetings.yml       First-issue / first-PR welcome messages
+.github/workflows/labeler.yml         Area labels from .github/labeler.yml
+.github/workflows/stale.yml           Daily stale sweep with reminders
+.github/workflows/live-smoke.yml      Dockerized compose smoke over examples/simple_app
+.github/workflows/docs.yml            mkdocs strict build + gh-deploy on master docs changes
+.github/workflows/container-release.yml  Publishes examples/advanced_app image to ghcr.io
+.github/workflows/upstream-drift.yml  Daily suite run against guard-core-php@master
 bin/test_psr15.php                    Entire test suite, plain PHP runner with a T assertion harness
 composer.json                         Package metadata, autoload, scripts, repositories
 composer.lock                         Locked deps; tracked; regenerate only deliberately
-src/GuardMiddleware.php               PSR-15 middleware
-src/PsrGuardRequest.php               PSR-7 ServerRequest to GuardRequest adapter
-src/ResponseTranslator.php            GuardResponse to PSR-7 ResponseInterface translator
+docs/index.md                         Docs home: what the adapter is, install, quick start
+docs/usage.md                         Constructor, verdict table, fail-closed, admin-gate equivalent
+docs/configuration.md                 SecurityConfig surface pointers, Redis, body bound
+examples/simple_app/                  Minimal guarded app (compose app + redis), live-smoke target
+examples/advanced_app/                Production-shaped app (env config, admin ban manager routes)
+mkdocs.yml                            MkDocs Material site definition
 LICENSE                               MIT, (c) 2026 Renzo Franceschini
 README.md                             Install, usage, lifecycle, behavior notes
 ```
@@ -106,7 +133,9 @@ README.md                             Install, usage, lifecycle, behavior notes
   - `psr/http-server-middleware ^1.0` (locked 1.0.2)
 - Dev deps: `nyholm/psr7 ^1.8` (locked 1.8.2), used only by `bin/test_psr15.php`.
 - CI runs a `redis:7-alpine` service container on port 6379 with health checks for the Redis integration tests.
-- Actions are pinned by commit SHA: `actions/checkout` v7.0.1 and `shivammathur/setup-php` 2.37.2.
+- Actions are pinned by commit SHA: `actions/checkout` v7.0.1, `shivammathur/setup-php` 2.37.2, `actions/ai-inference` v3, `crazy-max/ghaction-github-labeler` v6.0.0, `actions/first-interaction` v3.1.0, `actions/labeler` v7.0.0, `actions/stale` v11.0.0, `docker/login-action` v4.6.0, `docker/setup-compose-action` v2.4.0.
+- Examples run on `php:8.3-cli-alpine` (PHP built-in webserver, non-root in the advanced app) with composer builds from `composer:2`; Redis is `redis:7-alpine`.
+- Docs site: mkdocs-material, strict build, deployed to GitHub Pages by `docs.yml` on `master` pushes touching `docs/**`, `mkdocs.yml`, `README.md`, or `src/**`.
 
 ## Testing Guidelines
 
@@ -124,10 +153,11 @@ README.md                             Install, usage, lifecycle, behavior notes
 - The php -l sweep over `src` and `bin` must pass; `composer lint` prints `LINT_OK` on success.
 - Conventional commits are the house style (see `git log`): `feat:`, `fix:`, `fix(deps):`, `ci:`, `chore:`, `chore(composer):`, `test:`, `docs:`. Lowercase, imperative, no attribution trailers.
 - Dependabot keeps github-actions and composer dependencies fresh weekly (composer updates are grouped into one PR).
+- The examples are demo code, not package surface: they live under `examples/`, carry their own composer.json (no committed lock file), and must never import from `tests/` or be autoloaded by the library.
 
 ## Best Practices
 
-- `main` is protected. Work on a branch, push, open a PR. Never push to `main`, never tag, never publish a release as part of agent work.
+- `master` is protected. Work on a branch, push, open a PR. Never push to `master`, never tag, never publish a release as part of agent work.
 - Never `git add vendor/`, `.DS_Store`, or any stray file. Stage explicit paths only.
 - Keep the adapter thin. If a change adds detection, verdict logic, or response shaping beyond translation, it belongs in guard-core-php, not here.
 - Do not hardwire a PSR-7 implementation: the middleware takes `ResponseFactoryInterface` and `StreamFactoryInterface` so consumers pick their own PSR-17 factory (the tests use nyholm/psr7).
