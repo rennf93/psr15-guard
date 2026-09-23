@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "937d8e1fe1467e670635d25a000b3945",
+    "content-hash": "5ac6c7b3d015387d38084d161cdd5a84",
     "packages": [
         {
             "name": "psr/http-factory",
@@ -229,16 +229,16 @@
         },
         {
             "name": "rennf93/guard-core-php",
-            "version": "v0.1.0",
+            "version": "v4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rennf93/guard-core-php.git",
-                "reference": "89e8bd596257e607c427fc0cc26b80731cf80279"
+                "reference": "87992d8d078b9461e176f4bb4cfbf5730545e2d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rennf93/guard-core-php/zipball/89e8bd596257e607c427fc0cc26b80731cf80279",
-                "reference": "89e8bd596257e607c427fc0cc26b80731cf80279",
+                "url": "https://api.github.com/repos/rennf93/guard-core-php/zipball/87992d8d078b9461e176f4bb4cfbf5730545e2d5",
+                "reference": "87992d8d078b9461e176f4bb4cfbf5730545e2d5",
                 "shasum": ""
             },
             "require": {
@@ -266,10 +266,10 @@
             ],
             "description": "PHP port of guard-core: behavioral WAF engine (detection engine conformance milestone)",
             "support": {
-                "source": "https://github.com/rennf93/guard-core-php/tree/v0.1.0",
+                "source": "https://github.com/rennf93/guard-core-php/tree/v4.0.4",
                 "issues": "https://github.com/rennf93/guard-core-php/issues"
             },
-            "time": "2026-09-20T01:38:59+00:00"
+            "time": "2026-09-23T23:14:46+00:00"
         }
     ],
     "packages-dev": [
