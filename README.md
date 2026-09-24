@@ -2,22 +2,12 @@
 
 PSR-15 middleware adapter for [guard-core-php](https://github.com/rennf93/guard-core-php): translates any PSR-7 `ServerRequestInterface` to the guard-core engine and translates block verdicts back to PSR-7 responses. Works with Slim 4, Mezzio, Symfony PSR-15 bridges, or any PSR-7/PSR-15 stack.
 
+Docs: https://rennf93.github.io/psr15-guard/
+
 ## Install
 
 ```bash
 composer require rennf93/psr15-guard
-```
-
-Until `rennf93/guard-core-php` has a Packagist release, point composer at its repository and allow dev stability:
-
-```json
-{
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/rennf93/guard-core-php" }
-    ]
-}
 ```
 
 ## Usage
