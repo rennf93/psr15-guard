@@ -330,13 +330,8 @@ $handler = new RecordingHandler();
 $blocked = $middleware->process(psrRequest('/private', '192.0.2.66'), $handler);
 $t->same(403, $blocked->getStatusCode(), 'blacklisted ip -> 403');
 $t->same('Forbidden', (string) $blocked->getBody(), '403 body exact');
-// Engine >= 4.1 sets an explicit content type on block responses; the
-// published 4.0.x engine does not, so the header is optional here until
-// the coordinated floor bump.
 $headers = array_change_key_case($blocked->getHeaders(), CASE_LOWER);
-if (isset($headers['content-type'])) {
-    $t->same(['text/plain; charset=utf-8'], $headers['content-type'], 'block response content type explicit when the engine sets it');
-}
+$t->same(['text/plain; charset=utf-8'], $headers['content-type'] ?? [], 'block response content type explicit');
 unset($headers['content-type']);
 $t->same([], $headers, 'no unexpected headers on plain block (later sections)');
 $t->same(0, $handler->calls, 'handler not called on block');
