@@ -334,7 +334,9 @@ $t->same('Forbidden', (string) $blocked->getBody(), '403 body exact');
 // published 4.0.x engine does not, so the header is optional here until
 // the coordinated floor bump.
 $headers = array_change_key_case($blocked->getHeaders(), CASE_LOWER);
-$t->same(['text/plain; charset=utf-8'], $headers['content-type'] ?? [], 'block response content type explicit when the engine sets it');
+if (isset($headers['content-type'])) {
+    $t->same(['text/plain; charset=utf-8'], $headers['content-type'], 'block response content type explicit when the engine sets it');
+}
 unset($headers['content-type']);
 $t->same([], $headers, 'no unexpected headers on plain block (later sections)');
 $t->same(0, $handler->calls, 'handler not called on block');
